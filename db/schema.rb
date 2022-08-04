@@ -10,16 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_04_055340) do
+ActiveRecord::Schema.define(version: 2022_08_04_060506) do
 
   create_table "languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "language", null: false
+    t.string "name", null: false
     t.integer "amount", null: false
+    t.index ["name"], name: "index_languages_on_name"
   end
 
   create_table "locations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.index ["name"], name: "index_locations_on_name"
+  end
+
+  create_table "profile_languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "profile_id", null: false
+    t.bigint "language_id", null: false
+    t.index ["language_id"], name: "index_profile_languages_on_language_id"
+    t.index ["profile_id"], name: "index_profile_languages_on_profile_id"
   end
 
   create_table "profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -43,6 +51,13 @@ ActiveRecord::Schema.define(version: 2022_08_04_055340) do
     t.index ["nickname"], name: "index_profiles_on_nickname"
   end
 
+  create_table "repo_languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "repo_id", null: false
+    t.bigint "language_id", null: false
+    t.index ["language_id"], name: "index_repo_languages_on_language_id"
+    t.index ["repo_id"], name: "index_repo_languages_on_repo_id"
+  end
+
   create_table "repos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "url", null: false
@@ -55,6 +70,10 @@ ActiveRecord::Schema.define(version: 2022_08_04_055340) do
     t.index ["profile_id"], name: "index_repos_on_profile_id"
   end
 
+  add_foreign_key "profile_languages", "languages"
+  add_foreign_key "profile_languages", "profiles"
   add_foreign_key "profiles", "locations"
+  add_foreign_key "repo_languages", "languages"
+  add_foreign_key "repo_languages", "repos"
   add_foreign_key "repos", "profiles"
 end
