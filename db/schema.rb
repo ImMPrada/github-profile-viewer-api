@@ -10,7 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_04_054551) do
+ActiveRecord::Schema.define(version: 2022_08_04_055340) do
+
+  create_table "languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "language", null: false
+    t.integer "amount", null: false
+  end
 
   create_table "locations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -38,5 +43,18 @@ ActiveRecord::Schema.define(version: 2022_08_04_054551) do
     t.index ["nickname"], name: "index_profiles_on_nickname"
   end
 
+  create_table "repos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "url", null: false
+    t.string "description"
+    t.string "languages_url", null: false
+    t.boolean "is_active"
+    t.date "git_date", null: false
+    t.bigint "profile_id", null: false
+    t.index ["name"], name: "index_repos_on_name"
+    t.index ["profile_id"], name: "index_repos_on_profile_id"
+  end
+
   add_foreign_key "profiles", "locations"
+  add_foreign_key "repos", "profiles"
 end
