@@ -12,7 +12,6 @@ class Profile < ApplicationRecord
   validates :nickname, uniqueness: true
 
   belongs_to :location
-  has_one :location
   has_many :repos
   has_many :profile_languages, dependent: :destroy
   has_many :languages, through: :profile_languages
