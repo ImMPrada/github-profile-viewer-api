@@ -9,7 +9,7 @@ class Profile < ApplicationRecord
   validates_presence_of :followings
   validates_presence_of :git_date
 
-  validates :nickname, uniqueness: true
+  validates_uniqueness_of :nickname, :case_sensitive => false
 
   belongs_to :location
   has_many :repos
