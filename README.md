@@ -1,1 +1,1 @@
-# -github-profile-viewer-api
+# github-profile-viewer-api
