@@ -10,8 +10,6 @@ RSpec.describe Location, type: :model do
     let(:duplicate_location) { create(:location) }
 
     it 'should not be valid with blank or null name' do
-      location.name = ''
-      expect(location).not_to be_valid
       location.name = nil
       expect(location).not_to be_valid
     end
@@ -21,8 +19,6 @@ RSpec.describe Location, type: :model do
     end
     it 'should not be case sensitive, at name uniqueness validation' do
       duplicate_location.name = location.name.downcase
-      expect(duplicate_location).not_to be_valid
-      duplicate_location.name = location.name.upcase
       expect(duplicate_location).not_to be_valid
     end
   end
