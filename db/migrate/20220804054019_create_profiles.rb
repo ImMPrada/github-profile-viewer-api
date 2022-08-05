@@ -18,5 +18,7 @@ class CreateProfiles < ActiveRecord::Migration[6.0]
       t.date :git_date, null: false
       t.references :location, null: false, foreign_key: true
     end
+
+    add_index :profiles, :nickname, unique: true
   end
 end
