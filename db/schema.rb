@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_04_060506) do
+ActiveRecord::Schema.define(version: 2022_08_05_142632) do
 
   create_table "languages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -41,10 +41,10 @@ ActiveRecord::Schema.define(version: 2022_08_04_060506) do
     t.string "email"
     t.string "bio"
     t.string "twitter"
-    t.integer "public_repos", null: false
-    t.integer "public_gists", null: false
-    t.integer "followers", null: false
-    t.integer "followings", null: false
+    t.integer "public_repos_count", null: false
+    t.integer "public_gists_count", null: false
+    t.integer "followers_count", null: false
+    t.integer "followings_count", null: false
     t.date "git_date", null: false
     t.bigint "location_id", null: false
     t.index ["location_id"], name: "index_profiles_on_location_id"
