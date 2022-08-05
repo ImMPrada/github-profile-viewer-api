@@ -9,5 +9,7 @@ class CreateRepo < ActiveRecord::Migration[6.0]
       t.date :git_date, null: false
       t.references :profile, null: false, foreign_key: true
     end
+
+    add_index :repos, :name
   end
 end
