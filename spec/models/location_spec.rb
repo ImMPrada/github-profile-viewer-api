@@ -5,7 +5,7 @@ RSpec.describe Location, type: :model do
     it { should have_many(:profiles) }
   end
 
-  describe 'profile model validations' do
+  describe 'validations' do
     let(:location) { create(:location) }
     let(:duplicate_location) { create(:location) }
 

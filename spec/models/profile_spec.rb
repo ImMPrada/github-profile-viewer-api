@@ -8,7 +8,7 @@ RSpec.describe Profile, type: :model do
     it { should have_many(:languages) }
   end
 
-  describe 'profile model validations' do
+  describe 'validations' do
     subject(:profile) { create(:profile, location: location) }
     subject(:profile_duplicate) { create(:profile, location: location) }
 
@@ -81,12 +81,12 @@ RSpec.describe Profile, type: :model do
       wrong_profile.followings = nil
       expect(wrong_profile).not_to be_valid
     end
-    it 'should not be valid with blank or null followings' do
+    it 'should not be valid with blank or null git_date' do
       wrong_profile = profile
-      wrong_profile.followings = ''
+      wrong_profile.git_date = ''
       expect(wrong_profile).not_to be_valid
       wrong_profile = profile
-      wrong_profile.followings = nil
+      wrong_profile.git_date = nil
       expect(wrong_profile).not_to be_valid
     end
     it 'should not be valid if nickname is already takken' do
