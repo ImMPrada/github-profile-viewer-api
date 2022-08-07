@@ -23,22 +23,9 @@ RSpec.describe Location, type: :model do
   describe 'location must has many profiles' do
     let(:location) { create(:location) }
     let(:location2) { create(:location) }
-    let(:profile1) { build(:profile, location: location) }
-    let(:profile2) { build(:profile, location: location) }
-    let(:profile3) { build(:profile, location: location) }
-    let(:profile4) { build(:profile, location: location) }
-    let(:profile5) { build(:profile, location: location2) }
-    let(:profile6) { build(:profile, location: location2) }
-    let(:profile7) { build(:profile, location: location2) }
-
     before do
-      profile1.save
-      profile2.save
-      profile3.save
-      profile4.save
-      profile5.save
-      profile6.save
-      profile7.save
+      create_list(:profile, 4, location: location)
+      create_list(:profile, 3, location: location2)
     end
 
     it { expect(location.profiles.size).to eq(4) }
