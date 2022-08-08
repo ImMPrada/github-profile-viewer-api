@@ -1,8 +1,6 @@
 class Language < ApplicationRecord
-  validates_presence_of :name
-  validates_presence_of :amount
-
-  validates_uniqueness_of :name, :case_sensitive => false
+  validates :name, presence: true, uniqueness: true
+  validates :amount, presence: true
 
   has_many :repo_languages, dependent: :destroy
   has_many :repos, through: :repo_languages
