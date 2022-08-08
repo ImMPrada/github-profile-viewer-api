@@ -1,8 +1,8 @@
 class Repo < ApplicationRecord
-  validates_presence_of :name
-  validates_presence_of :url
-  validates_presence_of :languages_url
-  validates_presence_of :git_date
+  validates :name, presence: true
+  validates :url, presence: true
+  validates :languages_url, presence: true
+  validates :git_date, presence: true
 
   belongs_to :profile
   has_many :repo_languages, dependent: :destroy
