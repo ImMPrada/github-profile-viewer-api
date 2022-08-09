@@ -27,6 +27,8 @@ module Github
       { code: github_response.code, body: JSON.parse(github_response.body) }
     rescue RestClient::NotFound
       { code: 404, body: nil }
+    rescue RestClient::Forbidden
+      { code: 403, body: nil }
     end
   end
 end
