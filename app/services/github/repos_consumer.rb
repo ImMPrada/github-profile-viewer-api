@@ -3,7 +3,7 @@ module Github
     attr_accessor :github_repos, :github_repos_response_code
 
     def initialize(user_name)
-      github_response = ApiClient.new(user_name).get_github_profile_repos
+      github_response = ApiClient.new(user_name).call_for_github_profile_repos
       self.github_repos_response_code = github_response[:code]
       self.github_repos = github_response[:body]
     end

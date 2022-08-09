@@ -8,11 +8,11 @@ module Github
       self.user_name = user_name
     end
 
-    def get_github_profile_data
+    def call_for_github_profile_data
       get_data("#{BASER_URL}/users/#{user_name}")
     end
 
-    def get_github_profile_repos
+    def call_for_github_profile_repos
       get_data("#{BASER_URL}/users/#{user_name}/repos")
     end
 

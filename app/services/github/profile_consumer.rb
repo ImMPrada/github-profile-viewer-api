@@ -3,7 +3,7 @@ module Github
     attr_accessor :github_profile, :github_profile_response_code
 
     def initialize(user_name)
-      github_response = ApiClient.new(user_name).get_github_profile_data
+      github_response = ApiClient.new(user_name).call_for_github_profile_data
       self.github_profile_response_code = github_response[:code]
       self.github_profile = github_response[:body]
     end
@@ -17,7 +17,7 @@ module Github
     private
 
     def build_response
-      {}.merge(build_personal_info, build_data_info)
+      build_personal_info.merge(build_data_info)
     end
 
     def build_personal_info
@@ -29,7 +29,7 @@ module Github
         company: github_profile['company'],
         blog: github_profile['blog'],
         email: github_profile['email'],
-        bio: github_profile['bio'],
+        bio: github_profile['bio']
       }
     end
 
