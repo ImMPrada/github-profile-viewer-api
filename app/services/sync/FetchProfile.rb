@@ -10,6 +10,7 @@ module Sync
     def call
       unless profile
         self.profile = Sync::ProfileSync.new(profile, github_profile).create_profile
+        Sync::FetchRepos.new(profile).call
       end
 
       profile_needs_to_be_updated?
