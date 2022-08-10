@@ -10,20 +10,8 @@ RSpec.describe Github::RepoLanguagesConsumer do
     let(:repo_languages_consumer) { described_class.new('immprada', github_api_repo) }
     let(:repo_languages_consumer_call) { repo_languages_consumer.call }
 
-    before do
-      puts('Exptected keys and values:')
-      puts('---')
-      puts(github_api_repo_languages_call)
-      puts('---')
-      puts('---')
-      puts('---')
-      puts('Result of builded languages:')
-      puts('---')
-      puts(repo_languages_consumer_call)
-      puts('---')
-    end
 
-    it 'save the data from github api, for each lengage' do
+    it 'build the repo data, based on github api response' do
       repo_languages_consumer_call.each do |repo_language|
         expect(github_api_repo_languages_call[repo_language[:name]]).to eq(repo_language[:amount])
       end
