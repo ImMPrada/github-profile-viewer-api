@@ -12,8 +12,6 @@ module Sync
       if repos.size.zero?
         self.repos = Sync::ReposSync.new(profile, github_repos).create_repos
       end
-
-      byebug
     end
   end
 end
