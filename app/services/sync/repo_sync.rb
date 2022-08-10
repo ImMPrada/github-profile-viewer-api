@@ -1,23 +1,20 @@
 module Sync
-  class ReposSync
-    attr_accessor :github_repos, :profile, :repos, :github_repo
+  class RepoSync
+    attr_accessor :github_repo, :profile
 
-    def initialize(profile, github_repos)
+    def initialize(profile, github_repo)
       self.profile = profile
-      self.repos = profile.repos
-      self.github_repos = github_repos
+      self.github_repo = github_repo
     end
 
-    def create_repos
-      github_repos.each do |github_repo|
-        self.github_repo = github_repo
-        new_repo = Repo.new
-        fetch_data new_repo
-        fetch_profile new_repo
-        fetch_date new_repo
+    def create_repo
+      new_repo = Repo.new
+      fetch_data new_repo
+      fetch_profile new_repo
+      fetch_date new_repo
 
-        new_repo.save
-      end
+      new_repo.save
+      new_repo
     end
 
     private

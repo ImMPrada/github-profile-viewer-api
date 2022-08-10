@@ -10,7 +10,13 @@ module Sync
 
     def call
       if repos.size.zero?
-        self.repos = Sync::ReposSync.new(profile, github_repos).create_repos
+        github_repos.each do |github_repo|
+          repo = Sync::RepoSync.new(profile, github_repo).create_repo
+          Sync::FetchLanguages.new(repo).call
+        end
+        byebug
+        profile.reload
+        byebug
       end
     end
   end
