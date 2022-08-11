@@ -3,7 +3,7 @@ module Github
     attr_accessor :repo_name, :github_repo_languages, :github_repo_languages_response_code
 
     def initialize(user_name, repo_name)
-      github_response = ApiClient.new(user_name).get_github_repo_languages(repo_name)
+      github_response = ApiClient.new(user_name).get_repo_languages(repo_name)
       self.github_repo_languages_response_code = github_response[:code]
       self.github_repo_languages = github_response[:body]
       self.repo_name = repo_name

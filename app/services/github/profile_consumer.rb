@@ -6,7 +6,7 @@ module Github
     PROFILE_FIELDS = %i[nickname avatar_url url name company blog email bio twitter_username public_repos public_gists followers following git_date location].freeze
 
     def initialize(user_name)
-      github_response = ApiClient.new(user_name).call_for_github_profile_data
+      github_response = ApiClient.new(user_name).call_for_profile_data
       self.github_profile_response_code = github_response[:code]
       self.github_profile = github_response[:body]
     end
