@@ -1,5 +1,5 @@
 module Sync
-  class RepoSync
+  class SyncRepo
     attr_accessor :github_repo, :profile
 
     def initialize(profile, github_repo)
@@ -23,7 +23,6 @@ module Sync
       this_repo.name = github_repo[:name]
       this_repo.url = github_repo[:url]
       this_repo.description = github_repo[:description]
-      this_repo.languages_url = 'this will be not used'
       this_repo.is_active = true
 
       this_repo

@@ -1,5 +1,5 @@
 module Sync
-  class ProfileSync
+  class SyncProfile
     attr_accessor :github_profile, :profile
 
     def initialize(profile, github_profile)
@@ -23,7 +23,6 @@ module Sync
       this_profile.nickname = github_profile[:nickname]
       this_profile.avatar = github_profile[:avatar_url]
       this_profile.url = github_profile[:url]
-      this_profile.repos_url = 'this will be not used'
       this_profile.name = github_profile[:name]
       this_profile.company = github_profile[:company]
       this_profile.blog = github_profile[:blog]
