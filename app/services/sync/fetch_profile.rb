@@ -1,17 +1,21 @@
 module Sync
   class FetchProfile
-    attr_accessor :github_profile, :profile
-
     def initialize(profile_name)
-      self.profile = Profile.find_by(nickname: profile_name)
-      self.github_profile = Github::ProfileConsumer.new(profile_name).call
+      self.profile_name = profile_name
     end
 
     def call
+      profile = Profile.find_by(nickname: profile_name)
+      github_profile = Github::ProfileConsumer.new(profile_name).call
+
       unless profile
-        self.profile = Sync::SyncProfile.new(profile, github_profile).create_profile
+        profile = Sync::SyncProfile.new(profile, github_profile).create_profile
         Sync::FetchRepos.new(profile).call
       end
     end
+
+    private
+
+    attr_accessor :profile_name
   end
 end
