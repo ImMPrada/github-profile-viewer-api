@@ -1,7 +1,5 @@
 module Github
   class ProfileConsumer
-    attr_accessor :github_profile
-
     FIELD_MAPPING = {
       nickname: 'login',
       avatar_url: 'avatar_url',
@@ -21,21 +19,22 @@ module Github
     }.freeze
 
     def initialize(username)
-      @username = username
+      self.username = username
     end
 
     def call
-      github_response = ApiClient.new(@username)
+      github_response = ApiClient.new(username)
       github_response.fetch_profile_data
-      github_profile_response_code = github_response.code
       self.github_profile = github_response.body
 
-      return nil unless github_profile_response_code == 200
+      return nil unless github_response.code == 200
 
       build_response
     end
 
     private
+
+    attr_accessor :github_profile, :username
 
     def build_response
       assambled_profile = {}

@@ -1,8 +1,8 @@
 module Github
   class ApiClient
-    attr_accessor :username, :code, :body
+    attr_reader :code, :body
 
-    BASE_URL = 'https://api.github.com'
+    BASE_URL = 'https://api.github.com'.freeze
 
     def initialize(username)
       self.username = username
@@ -21,6 +21,9 @@ module Github
     end
 
     private
+
+    attr_accessor :username
+    attr_writer :code, :body
 
     def get_data(url)
       github_response = RestClient.get(url)
