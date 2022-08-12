@@ -1,28 +1,35 @@
 module Sync
   class SyncProfile
-    def initialize(profile, github_profile)
-      self.profile = profile
-      self.github_profile = github_profile
+    def initialize(profile_data)
+      self.profile_data = profile_data
     end
 
     def create_profile
-      new_profile = Profile.new
-      fetch_data new_profile
-      new_profile.save
+      self.profile = Profile.new
+      assign_attributes
 
-      new_profile
+      profile
+    end
+
+    def update_profile(current_profile)
+      self.profile = current_profile
+      assign_attributes
+
+      profile
     end
 
     private
 
-    attr_accessor :github_profile, :profile
+    attr_accessor :profile_data, :profile
 
-    def fetch_data(this_profile)
-      github_profile[:location] = Location.find_or_create_by name: github_profile[:location]
-      github_profile[:git_date] = Date.parse github_profile[:git_date]
-      this_profile.attributes = github_profile
+    def assign_attributes
+      profile_params = profile_data.merge(
+        location: Location.find_or_create_by(name: profile_data[:location]),
+        git_date: profile_data[:git_date]
+      )
 
-      this_profile
+      profile.attributes = profile_params
+      profile.save
     end
   end
 end

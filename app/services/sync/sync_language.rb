@@ -1,14 +1,14 @@
 module Sync
   class SyncLanguage
-    def initialize(profile, repo, github_repo_language)
+    def initialize(profile, repo, repo_language_data)
       self.profile = profile
       self.repo = repo
-      self.github_repo_language = github_repo_language
+      self.repo_language_data = repo_language_data
     end
 
     def create_language
       new_language = Language.new
-      fetch_data new_language
+      assign_attributes new_language
       new_language.save
       fetch_profile_and_repo new_language
 
@@ -17,10 +17,10 @@ module Sync
 
     private
 
-    attr_accessor :github_repo_language, :repo, :profile
+    attr_accessor :repo_language_data, :repo, :profile
 
-    def fetch_data(this_language)
-      this_language.attributes = github_repo_language
+    def assign_attributes(this_language)
+      this_language.attributes = repo_language_data
     end
 
     def fetch_profile_and_repo(this_language)

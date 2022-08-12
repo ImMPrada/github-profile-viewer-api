@@ -10,8 +10,6 @@ module Sync
       github_repo_languages.each do |github_repo_language|
         Sync::SyncLanguage.new(profile, repo, github_repo_language).create_language
       end
-      profile.reload
-      repo.reload
     end
 
     private
