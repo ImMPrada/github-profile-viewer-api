@@ -2,18 +2,18 @@ module Github
   class ProfileConsumer
     FIELD_MAPPING = {
       nickname: 'login',
-      avatar_url: 'avatar_url',
+      avatar: 'avatar_url',
       url: 'html_url',
       name: 'name',
       company: 'company',
       blog: 'blog',
       email: 'email',
       bio: 'bio',
-      twitter_username: 'twitter_username',
-      public_repos: 'public_repos',
-      public_gists: 'public_gists',
-      followers: 'followers',
-      following: 'following',
+      twitter: 'twitter_username',
+      public_repos_count: 'public_repos',
+      public_gists_count: 'public_gists',
+      followers_count: 'followers',
+      followings_count: 'following',
       git_date: 'updated_at',
       location: 'location'
     }.freeze
