@@ -1,6 +1,6 @@
 module Github
   class ProfileConsumer
-    FIELD_MAPPING = {
+    FIELDS_MAPPING = {
       nickname: 'login',
       avatar: 'avatar_url',
       url: 'html_url',
@@ -27,7 +27,7 @@ module Github
       github_response.fetch_profile_data
       self.github_profile = github_response.body
 
-      return nil unless github_response.code == 200
+      return unless github_response.code == 200
 
       build_response
     end
@@ -38,7 +38,7 @@ module Github
 
     def build_response
       assambled_profile = {}
-      FIELD_MAPPING.each do |profile_field, gh_field|
+      FIELDS_MAPPING.each do |profile_field, gh_field|
         assambled_profile[profile_field] = github_profile[gh_field]
       end
       assambled_profile
