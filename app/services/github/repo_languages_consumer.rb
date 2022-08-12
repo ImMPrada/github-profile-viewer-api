@@ -10,7 +10,7 @@ module Github
       github_response.fetch_repo_languages(repo_name)
       self.github_repo_languages = github_response.body
 
-      return nil unless github_response.code == 200
+      return unless github_response.code == 200
 
       build_response
     end
