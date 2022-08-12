@@ -11,7 +11,7 @@ module Sync
       if repos.size.zero?
         github_repos.each do |github_repo|
           repo = Sync::SyncRepo.new(profile, github_repo).create_repo
-          # Sync::FetchLanguages.new(profile, repo).call
+          Sync::FetchLanguages.new(profile, repo).call
         end
       end
     end

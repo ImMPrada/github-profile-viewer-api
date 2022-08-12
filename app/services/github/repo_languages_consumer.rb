@@ -25,7 +25,7 @@ module Github
 
     def build_languages_response(language, amount)
       {
-        repo: repo_name,
+        repo_name: repo_name,
         name: language,
         amount: amount
       }

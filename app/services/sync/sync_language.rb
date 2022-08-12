@@ -1,7 +1,5 @@
 module Sync
   class SyncLanguage
-    attr_accessor :github_repo_language, :repo, :profile
-
     def initialize(profile, repo, github_repo_language)
       self.profile = profile
       self.repo = repo
@@ -19,12 +17,10 @@ module Sync
 
     private
 
-    def fetch_data(this_language)
-      this_language.name = github_repo_language[:name]
-      this_language.amount = github_repo_language[:amount]
-      this_language.repo_name = github_repo_language[:repo_name]
+    attr_accessor :github_repo_language, :repo, :profile
 
-      this_language
+    def fetch_data(this_language)
+      this_language.attributes = github_repo_language
     end
 
     def fetch_profile_and_repo(this_language)
