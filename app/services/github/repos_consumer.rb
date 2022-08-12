@@ -1,23 +1,29 @@
 module Github
   class ReposConsumer
-    attr_accessor :github_repos, :github_repos_response_code
+    FIELD_MAPPING = {
+      name: 'name',
+      url: 'html_url',
+      description: 'description',
+      git_date: 'updated_at'
+    }.freeze
 
-    GITHUB_RESPONSE_FIELDS = %w[name html_url description updated_at].freeze
-    PROFILE_FIELDS = %i[name url description git_date].freeze
-
-    def initialize(user_name)
-      github_response = ApiClient.new(user_name).call_for_profile_repos
-      self.github_repos_response_code = github_response[:code]
-      self.github_repos = github_response[:body]
+    def initialize(username)
+      self.username = username
     end
 
     def call
-      return nil unless github_repos_response_code == 200
+      github_response = ApiClient.new(username)
+      github_response.fetch_profile_repos
+      self.github_repos = github_response.body
+
+      return nil unless github_response.code == 200
 
       build_response
     end
 
     private
+
+    attr_accessor :github_repos, :username
 
     def build_response
       github_repos.map { |repo| build_repo_response(repo) }
@@ -25,8 +31,8 @@ module Github
 
     def build_repo_response(repo)
       assambled_repo = {}
-      (0...GITHUB_RESPONSE_FIELDS.size).each do |i|
-        assambled_repo[PROFILE_FIELDS[i]] = repo[GITHUB_RESPONSE_FIELDS[i]]
+      FIELD_MAPPING.each do |repo_field, gh_field|
+        assambled_repo[repo_field] = repo[gh_field]
       end
       assambled_repo.merge({ is_active: true })
     end
