@@ -1,35 +1,43 @@
 module Sync
   class SyncRepo
-    attr_accessor :github_repo, :profile
-
-    def initialize(profile, github_repo)
+    def initialize(profile, repo_data)
       self.profile = profile
-      self.github_repo = github_repo
+      self.repo_data = repo_data
     end
 
     def create_repo
-      new_repo = Repo.new
-      fetch_data new_repo
-      fetch_profile new_repo
-      new_repo.save
+      self.repo = Repo.new
+      assign_attributes true
+      assign_repo_profile
+      repo.save
+    end
 
-      new_repo
+    def update_repo(current_repo)
+      self.repo = current_repo
+      assign_attributes true
+      repo.save
+    end
+
+    def deactivate_repo(current_repo)
+      self.repo = current_repo
+      assign_attributes false
+      repo.save
     end
 
     private
 
-    def fetch_data(this_repo)
-      github_repo[:is_active] = true
-      github_repo[:git_date] = Date.parse github_repo[:git_date]
-      this_repo.attributes = github_repo
+    attr_accessor :repo_data, :profile, :repo
 
-      this_repo
+    def assign_attributes(is_active)
+      repo_params = repo_data.merge(
+        is_active: is_active,
+        git_date: Date.parse(repo_data[:git_date])
+      )
+      repo.attributes = repo_params
     end
 
-    def fetch_profile(this_repo)
-      this_repo.profile = profile
-
-      this_repo
+    def assign_repo_profile
+      repo.profile = profile
     end
   end
 end
