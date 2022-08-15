@@ -1,18 +1,17 @@
 class Profile < ApplicationRecord
-  validates_presence_of :nickname
-  validates_presence_of :avatar
-  validates_presence_of :url
-  validates_presence_of :repos_url
-  validates_presence_of :public_repos
-  validates_presence_of :public_gists
-  validates_presence_of :followers
-  validates_presence_of :followings
-  validates_presence_of :git_date
-
-  validates_uniqueness_of :nickname, :case_sensitive => false
+  validates :nickname, presence: true, uniqueness: true
+  validates :avatar, presence: true
+  validates :url, presence: true
+  validates :repos_url, presence: true
+  validates :public_repos_count, presence: true
+  validates :public_gists_count, presence: true
+  validates :followers_count, presence: true
+  validates :followings_count, presence: true
+  validates :git_date, presence: true
 
   belongs_to :location
-  has_many :repos
+
+  has_many :repos, dependent: :destroy
   has_many :profile_languages, dependent: :destroy
   has_many :languages, through: :profile_languages
 end
