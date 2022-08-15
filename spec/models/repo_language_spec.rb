@@ -8,21 +8,12 @@ RSpec.describe RepoLanguage, type: :model do
 
   describe 'validations' do
     subject(:repo_language) { create(:repo_language, repo: repo, language: language) }
-    let(:language) { create(:language) }
-    let(:repo) { create(:repo, profile: profile) }
-    let(:profile) { create(:profile, location: location) }
-    let(:location) { create(:location) }
 
-    it 'should be valid' do
-      expect(repo_language).to be_valid
-    end
-    it 'should not be valid with null repo' do
-      repo_language.repo = nil
-      expect(repo_language).not_to be_valid
-    end
-    it 'should not be valid with null language' do
-      repo_language.language = nil
-      expect(repo_language).not_to be_valid
-    end
+    let(:language) { create(:language) }
+    let(:location) { create(:location) }
+    let(:profile) { create(:profile, location: location) }
+    let(:repo) { create(:repo, profile: profile) }
+
+    it { expect(repo_language).to be_valid }
   end
 end
