@@ -10,6 +10,10 @@ RSpec.describe Profile, type: :model do
   describe 'validations' do
     subject(:profile) { build(:profile, location: create(:location)) }
 
+    before do
+      create_list(:repo, 4, profile: profile)
+    end
+
     it { is_expected.to validate_presence_of(:nickname) }
     it { is_expected.to validate_presence_of(:avatar) }
     it { is_expected.to validate_presence_of(:url) }
@@ -19,6 +23,7 @@ RSpec.describe Profile, type: :model do
     it { is_expected.to validate_presence_of(:followers_count) }
     it { is_expected.to validate_presence_of(:followings_count) }
     it { is_expected.to validate_presence_of(:git_date) }
+    it { expect(profile.repos.size).to eq(4) }
   end
 
   describe 'validate: counts can be 0' do
