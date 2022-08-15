@@ -1,7 +1,6 @@
 class Repo < ApplicationRecord
   validates :name, presence: true
   validates :url, presence: true
-  validates :languages_url, presence: true
   validates :git_date, presence: true
 
   belongs_to :profile
