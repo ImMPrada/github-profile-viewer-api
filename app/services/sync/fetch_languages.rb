@@ -8,7 +8,7 @@ module Sync
     def call
       github_repo_languages = Github::RepoLanguagesConsumer.new(profile.nickname, repo.name).call
       github_repo_languages.each do |github_repo_language|
-        Sync::SyncLanguage.new(profile, repo, github_repo_language).create_language
+        Sync::SyncLanguage.new(profile, repo, github_repo_language).synchronize
       end
     end
 

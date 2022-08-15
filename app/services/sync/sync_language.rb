@@ -6,26 +6,28 @@ module Sync
       self.repo_language_data = repo_language_data
     end
 
-    def create_language
-      new_language = Language.new
-      assign_attributes new_language
-      new_language.save
-      fetch_profile_and_repo new_language
+    def synchronize
+      self.language = repo.languages.find_by(name: repo_language_data[:name])
+      self.language = Language.new if language.nil?
 
-      new_language
+      assign_attributes
+      language.save
+      fetch_profile_and_repo
+
+      language
     end
 
     private
 
-    attr_accessor :repo_language_data, :repo, :profile
+    attr_accessor :repo_language_data, :repo, :profile, :language
 
-    def assign_attributes(this_language)
-      this_language.attributes = repo_language_data
+    def assign_attributes
+      language.attributes = repo_language_data
     end
 
-    def fetch_profile_and_repo(this_language)
-      RepoLanguage.create(repo: repo, language: this_language)
-      ProfileLanguage.create(profile: profile, language: this_language)
+    def fetch_profile_and_repo
+      RepoLanguage.create(repo: repo, language: language)
+      ProfileLanguage.create(profile: profile, language: language)
     end
   end
 end
