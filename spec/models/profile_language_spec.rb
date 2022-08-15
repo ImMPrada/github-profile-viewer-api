@@ -13,6 +13,7 @@ RSpec.describe ProfileLanguage, type: :model do
     let(:location) { create(:location) }
     let(:profile) { create(:profile, location: location) }
 
-    it { expect(profile_language).to be_valid }
+    it { expect(profile_language.profile).to eq(profile) }
+    it { expect(profile_language.language).to eq(language) }
   end
 end
