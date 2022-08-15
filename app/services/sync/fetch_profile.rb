@@ -11,7 +11,7 @@ module Sync
       return if profile.present? && github_profile.nil?
 
       create_profile_if_not_exists
-      syncronyze_profile
+      synchronize_profile
       Sync::FetchRepos.new(profile).call
     end
 
@@ -25,7 +25,7 @@ module Sync
       self.profile = Sync::SyncProfile.new(github_profile).create_profile
     end
 
-    def syncronyze_profile
+    def synchronize_profile
       this_profile_date = profile.git_date
       github_profile_date = Date.parse(github_profile[:git_date])
 
