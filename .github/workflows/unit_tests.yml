@@ -4,12 +4,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: ''
-        ports:
-          - 3306
       redis:
         image: redis
         options: >-
@@ -19,22 +13,26 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         
     steps:
       - uses: actions/checkout@v1
 
-      - name: Set up MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-          mysql database: 'github_profile_viewer_api_test' # Optional, default value is "test". The specified database which will be create
-          mysql user: 'testroot' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: 'testpass' # Required if "mysql user" exists. The password for the "mysql user"
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.2
+
+      - name: Verify MySQL connection from host
+        run: |
+          sudo apt-get install -y mysql-client libmysqlclient-dev
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SHOW GRANTS FOR 'root'@'localhost'"
+          mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot mysql
 
       - name: Bundle install
         run: |
@@ -45,12 +43,11 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:schema:load
         env:
-          MYSQL_USER: testroot
-          MYSQL_PASS: testpass
+          MYSQL_PASS: root
+          RAILS_ENV: test
 
       - name: Run RSpec
         run: bundle exec rspec  --require rails_helper
         env:
-          MYSQL_USER: testroot
-          MYSQL_PASS: testpass
+          MYSQL_PASS: root
 
