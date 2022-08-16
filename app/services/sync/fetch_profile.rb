@@ -26,10 +26,10 @@ module Sync
     end
 
     def synchronize_profile
-      this_profile_date = profile.git_date
+      profile_date = profile.git_date
       github_profile_date = Date.parse(github_profile[:git_date])
 
-      Sync::SyncProfile.new(github_profile).update_profile(profile) if this_profile_date < github_profile_date
+      Sync::SyncProfile.new(github_profile).update_profile(profile) if profile_date < github_profile_date
     end
   end
 end
