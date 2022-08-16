@@ -4,7 +4,6 @@ FactoryBot.define do
     nickname { Faker::Name.first_name }
     avatar { 'asdas' }
     url { 'ada' }
-    repos_url { 'sadas' }
     public_repos_count { Faker::Number.between(from: 1, to: 30) }
     public_gists_count { Faker::Number.between(from: 1, to: 30) }
     followers_count { Faker::Number.between(from: 1, to: 10) }
