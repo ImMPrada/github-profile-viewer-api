@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_10_185824) do
+ActiveRecord::Schema.define(version: 2022_08_05_142632) do
 
   create_table "languages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.integer "amount", null: false
-    t.string "repo_name", null: false
-    t.index ["name"], name: "index_languages_on_name"
+    t.index ["name"], name: "index_languages_on_name", unique: true
   end
 
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -35,6 +34,7 @@ ActiveRecord::Schema.define(version: 2022_08_10_185824) do
     t.string "nickname", null: false
     t.string "avatar", null: false
     t.string "url", null: false
+    t.string "repos_url", null: false
     t.string "name"
     t.string "company"
     t.string "blog"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2022_08_10_185824) do
     t.string "name", null: false
     t.string "url", null: false
     t.string "description"
+    t.string "languages_url", null: false
     t.boolean "is_active"
     t.date "git_date", null: false
     t.bigint "profile_id", null: false

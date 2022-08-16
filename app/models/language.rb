@@ -1,5 +1,5 @@
 class Language < ApplicationRecord
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :amount, presence: true
 
   has_many :repo_languages, dependent: :destroy

@@ -2,6 +2,7 @@ class Profile < ApplicationRecord
   validates :nickname, presence: true, uniqueness: true
   validates :avatar, presence: true
   validates :url, presence: true
+  validates :repos_url, presence: true
   validates :public_repos_count, presence: true
   validates :public_gists_count, presence: true
   validates :followers_count, presence: true

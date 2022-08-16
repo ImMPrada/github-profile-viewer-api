@@ -21,4 +21,4 @@ RSpec/MultipleMemoizedHelpers:
   Max: 10
 
 Metrics/MethodLength:
-  Max: 18
+  Max: 15
