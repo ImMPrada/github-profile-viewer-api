@@ -8,7 +8,7 @@ RSpec.describe Profile, type: :model do
   end
 
   describe 'validations' do
-    subject(:profile) { build(:profile, location: create(:location)) }
+    subject(:profile) { build(:profile) }
 
     before do
       create_list(:repo, 4, profile: profile)
@@ -17,7 +17,6 @@ RSpec.describe Profile, type: :model do
     it { is_expected.to validate_presence_of(:nickname) }
     it { is_expected.to validate_presence_of(:avatar) }
     it { is_expected.to validate_presence_of(:url) }
-    it { is_expected.to validate_presence_of(:repos_url) }
     it { is_expected.to validate_presence_of(:public_repos_count) }
     it { is_expected.to validate_presence_of(:public_gists_count) }
     it { is_expected.to validate_presence_of(:followers_count) }
