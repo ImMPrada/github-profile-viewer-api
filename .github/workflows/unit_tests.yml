@@ -4,35 +4,32 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-      mysql:
-        image: mysql:5.7
+      db:
+        image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_USERNAME: root
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_DATABASE: github_profile_viewer_api_test
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
         
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.2
 
-      - name: Verify MySQL connection from host
-        run: |
-          sudo apt-get install -y mysql-client libmysqlclient-dev
-          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SHOW GRANTS FOR 'root'@'localhost'"
-          mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot mysql
+      - name: Install dependencies
+        run: sudo apt-get -yqq install libmysqlclient-dev mysql-client
 
       - name: Bundle install
         run: |
@@ -40,14 +37,17 @@ jobs:
           bundle
       - name: Setup Database
         run: |
+          cp config/database.github-actions.yml config/database.yml
           bundle exec rake db:create
           bundle exec rake db:schema:load
         env:
-          MYSQL_PASS: root
+          MYSQL_PASSWORD: password
           RAILS_ENV: test
+          MYSQL_HOST: 127.0.0.1 
 
       - name: Run RSpec
         run: bundle exec rspec  --require rails_helper
         env:
-          MYSQL_PASS: root
-
+          MYSQL_PASSWORD: password
+          RAILS_ENV: test
+          MYSQL_HOST: 127.0.0.1
