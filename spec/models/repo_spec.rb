@@ -12,7 +12,6 @@ RSpec.describe Repo, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:url) }
-    it { is_expected.to validate_presence_of(:languages_url) }
     it { is_expected.to validate_presence_of(:git_date) }
   end
 end

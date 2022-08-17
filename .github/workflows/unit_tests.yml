@@ -1,0 +1,53 @@
+name: RSpec workflow
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_USERNAME: root
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_DATABASE: github_profile_viewer_api_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+
+      - name: Install dependencies
+        run: sudo apt-get -yqq install libmysqlclient-dev mysql-client
+
+      - name: Bundle install
+        run: |
+          gem install bundler
+          bundle
+      - name: Setup Database
+        run: |
+          cp config/database.github-actions.yml config/database.yml
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
+        env:
+          MYSQL_PASSWORD: password
+          RAILS_ENV: test
+          MYSQL_HOST: 127.0.0.1 
+
+      - name: Run RSpec
+        run: bundle exec rspec  --require rails_helper
+        env:
+          MYSQL_PASSWORD: password
+          RAILS_ENV: test
+          MYSQL_HOST: 127.0.0.1
