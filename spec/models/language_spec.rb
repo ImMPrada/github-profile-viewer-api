@@ -16,7 +16,7 @@ RSpec.describe Language, type: :model do
   end
 
   describe '.amounts_by_language' do
-    let(:amount_by_languages_expcted_result) do 
+    let(:amount_by_languages_expcted_result) do
       {
         'Ruby' => 10,
         'Python' => 20,
@@ -41,7 +41,7 @@ RSpec.describe Language, type: :model do
   end
 
   describe '.total_amount' do
-    let(:total_amount_expcted_result) {30}
+    let(:total_amount_expcted_result) { 30 }
 
     before do
       create(:language, name: 'Ruby', amount: 10)
@@ -55,7 +55,7 @@ RSpec.describe Language, type: :model do
   end
 
   describe '.weights_by_language' do
-    let(:weights_by_language_expcted_result) do 
+    let(:weights_by_language_expcted_result) do
       {
         'Ruby' => 0.1,
         'Python' => 0.2,
