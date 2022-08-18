@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Github::ProfileConsumer do
   let(:profile_consumer) { described_class.new('immprada') }
 
-  describe 'when the profile exists on github, ApiClient code: 200' do
+  describe 'when ApiClient code: 200' do
     let(:expected_response) do
       {
         nickname: 'ImMPrada',
@@ -77,7 +77,7 @@ RSpec.describe Github::ProfileConsumer do
     end
   end
 
-  describe 'when the profile exists on github, ApiClient code: 4XX' do
+  describe 'when ApiClient code: 4XX' do
     let(:expected_response) { nil }
 
     before do
