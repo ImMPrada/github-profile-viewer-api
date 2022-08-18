@@ -36,7 +36,7 @@ RSpec.describe Language, type: :model do
     end
 
     it 'returns a hash of languages and amounts' do
-      expect(described_class.all.amounts_by_language).to eq(amount_by_languages_expcted_result)
+      expect(described_class.amounts_by_language).to eq(amount_by_languages_expcted_result)
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe Language, type: :model do
     end
 
     it 'returns the total amount of languages' do
-      expect(described_class.all.total_amount).to eq(total_amount_expcted_result)
+      expect(described_class.total_amount).to eq(total_amount_expcted_result)
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe Language, type: :model do
     end
 
     it 'returns a hash of languages and weights' do
-      expect(described_class.all.weights_by_language).to eq(weights_by_language_expcted_result)
+      expect(described_class.weights_by_language).to eq(weights_by_language_expcted_result)
     end
   end
 end
