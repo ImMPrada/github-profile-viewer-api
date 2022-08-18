@@ -146,5 +146,4 @@ RSpec.describe Github::ApiClient do
       end
     end
   end
-
 end

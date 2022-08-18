@@ -20,7 +20,7 @@ RSpec.describe Github::ProfileConsumer do
         location: 'Colombia',
         public_gists_count: 0,
         public_repos_count: 15,
-        twitter: 'im_mprada',
+        twitter: 'im_mprada'
       }
     end
 
@@ -32,7 +32,7 @@ RSpec.describe Github::ProfileConsumer do
         body:
           {
             'login' => 'ImMPrada',
-            'id' => 26731448,
+            'id' => 26_731_448,
             'node_id' => 'MDQ6VXNlcjI2NzMxNDQ4',
             'avatar_url' => 'https://avatars.githubusercontent.com/u/26731448?v=4',
             'gravatar_id' => '',
