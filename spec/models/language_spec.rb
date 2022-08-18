@@ -14,16 +14,4 @@ RSpec.describe Language, type: :model do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:amount) }
   end
-
-  describe 'valid with amount = 0' do
-    subject(:language) { build(:language, amount: 0) }
-
-    it { expect(language).to be_valid }
-  end
-
-  describe 'valid with null amount' do
-    subject(:language) { build(:language, amount: nil) }
-
-    it { expect(language).not_to be_valid }
-  end
 end
