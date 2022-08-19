@@ -1,5 +1,5 @@
 module Sync
-  class FetchProfile 
+  class FetchProfile
     def initialize(profile_name)
       self.profile_name = profile_name
     end
@@ -8,7 +8,7 @@ module Sync
       self.profile = Profile.find_by(nickname: profile_name)
       self.github_profile = Github::ProfileConsumer.new(profile_name).call
 
-      return if profile.present? && github_profile.nil?
+      return if profile.nil? && github_profile.nil?
 
       create_profile_if_not_exists
       synchronize_profile
