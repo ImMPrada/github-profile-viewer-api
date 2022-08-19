@@ -25,42 +25,81 @@ RSpec.describe Sync::FetchProfile do
   end
 
   describe '#call' do
-    before do
-      profile_response = instance_double(
-        Github::ProfileConsumer,
-        call: nil
-      )
-      allow(Github::ProfileConsumer).to receive(:new).and_return(profile_response)
-      profile = Profile.find_by(nickname: profile_name)
-      profile.destroy if profile.present?
+    describe 'profile from Github: doesn\'t exist, profile from DB: doesn\'t exist' do
+      before do
+        profile_response = instance_double(
+          Github::ProfileConsumer,
+          call: nil
+        )
+        allow(Github::ProfileConsumer).to receive(:new).and_return(profile_response)
+        profile = Profile.find_by(nickname: profile_name)
+        profile.destroy if profile.present?
+      end
+
+      it 'returns nil' do
+        expect(fetch_profile.call).to be_nil
+      end
     end
 
-    it 'returns nill if a profile is not found at Github and DB' do
-      expect(fetch_profile.call).to be_nil
-    end
-  end
+    describe 'profile from Github: exists, profile from DB: doesn\'t exist' do
+      before do
+        profile_response = instance_double(
+          Github::ProfileConsumer,
+          call: profile_data
+        )
+        allow(Github::ProfileConsumer).to receive(:new).and_return(profile_response)
+        null_repo_consumer_response = instance_double(
+          Sync::FetchRepos,
+          call: nil
+        )
+        allow(Sync::FetchRepos).to receive(:new).and_return(null_repo_consumer_response)
+      end
 
-  describe '#call with profile not existing in the DB but existing on github' do
-    before do
-      profile_response = instance_double(
-        Github::ProfileConsumer,
-        call: profile_data
-      )
-      allow(Github::ProfileConsumer).to receive(:new).and_return(profile_response)
-      null_repo_consumer_response = instance_double(
-        Sync::FetchRepos,
-        call: nil
-      )
-      allow(Sync::FetchRepos).to receive(:new).and_return(null_repo_consumer_response)
+      it 'saves profile data in DB' do
+        fetch_profile.call
+        expect(Profile.find_by(nickname: profile_name)).not_to be_nil
+      end
+
+      it 'returns the right profile from DB' do
+        expect(fetch_profile.call.url).to eq(profile_url)
+      end
     end
 
-    it 'saves profile data in DB' do
-      fetch_profile.call
-      expect(Profile.find_by(nickname: profile_name)).not_to be_nil
-    end
+    describe 'profile from Github: exists, profile from DB: exists, and needs to be updated' do
+      let(:existing_profile) { create(:profile, git_date: '2022-07-01T00:16:27Z') }
 
-    it 'returns the right profile form DB' do
-      expect(fetch_profile.call.url).to eq(profile_url)
+      before do
+        profile_response = instance_double(
+          Github::ProfileConsumer,
+          call: profile_data
+        )
+        allow(Github::ProfileConsumer).to receive(:new).and_return(profile_response)
+
+        null_repo_consumer_response = instance_double(
+          Sync::FetchRepos,
+          call: nil
+        )
+        allow(Sync::FetchRepos).to receive(:new).and_return(null_repo_consumer_response)
+      end
+
+      it 'updates the profile in the DB' do
+        fetch_profile.call
+        from_db = Profile.find_by(nickname: profile_name)
+        obtained = from_db.values_at(:followers_count, :followings_count, :public_gists_count, :public_repos_count)
+        expected = profile_data.values_at(:followers_count, :followings_count, :public_gists_count, :public_repos_count)
+
+        expect(obtained).to eq(expected)
+      end
+
+      it 'returns the profile updated' do
+        obtained_profile = fetch_profile.call
+        expect(obtained_profile).to eq(Profile.find_by(nickname: profile_name))
+      end
+
+      it 'returns the right profile from DB' do
+        fetch_profile.call
+        expect(Profile.find_by(nickname: profile_name)[:url]).to eq(profile_url)
+      end
     end
   end
 end
