@@ -12,7 +12,8 @@ module Sync
 
       create_profile_if_not_exists
       synchronize_profile
-      Sync::FetchRepos.new(profile).call
+
+      profile
     end
 
     private
@@ -30,6 +31,7 @@ module Sync
       github_profile_date = Date.parse(github_profile[:git_date])
 
       Sync::SyncProfile.new(github_profile).update_profile(profile) if profile_date < github_profile_date
+      Sync::FetchRepos.new(profile).call
     end
   end
 end
