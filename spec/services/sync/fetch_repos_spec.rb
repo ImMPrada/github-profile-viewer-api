@@ -88,7 +88,7 @@ RSpec.describe Sync::FetchRepos do
 
     describe 'repos from Github: exists, from DB: updates' do
       let(:existing_repo1) { create(:repo, name: 'repo1', profile: profile, git_date: '2022-08-03T00:16:27Z') }
-      let(:to_day_date) {Date.parse '2022-09-10T00:16:27Z' }
+      let(:to_day_date) { Date.parse '2022-09-10T00:16:27Z' }
 
       before do
         repos_response = instance_double(
