@@ -38,5 +38,52 @@ RSpec.describe Sync::FetchRepos do
         expect(fetch_repos.call).to eq([])
       end
     end
+
+    describe 'repos from Github: exists' do
+      before do
+        repos_response = instance_double(
+          Github::ReposConsumer,
+          call: [
+            {
+              name: 'repo1',
+              description: '',
+              url: 'URL:://repo1',
+              git_date: '2022-08-03T00:16:27Z',
+              is_active: true
+            },
+            {
+              name: 'repo2',
+              description: '',
+              url: 'URL:://repo2',
+              git_date: '2022-08-03T00:16:27Z',
+              is_active: true
+            },
+            {
+              name: 'repo3',
+              description: '',
+              url: 'URL:://repo3',
+              git_date: '2022-08-03T00:16:27Z',
+              is_active: true
+            }
+          ]
+        )
+        allow(Github::ReposConsumer).to receive(:new).and_return(repos_response)
+
+        languages_response = instance_double(
+          Sync::FetchLanguages,
+          call: []
+        )
+        allow(Sync::FetchLanguages).to receive(:new).and_return(languages_response)
+      end
+
+      it 'returns list of repos' do
+        expect(fetch_repos.call.size).to eq(3)
+      end
+
+      it 'saves repos on DB' do
+        fetch_repos.call
+        expect(Profile.find_by(nickname: profile.nickname).repos.size).to eq(3)
+      end
+    end
   end
 end
