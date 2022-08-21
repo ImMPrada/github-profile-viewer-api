@@ -85,5 +85,44 @@ RSpec.describe Sync::FetchRepos do
         expect(Profile.find_by(nickname: profile.nickname).repos.size).to eq(3)
       end
     end
+
+    describe 'repos from Github: exists, from DB: updates' do
+      let(:existing_repo1) { create(:repo, name: 'repo1', profile: profile, git_date: '2022-08-03T00:16:27Z') }
+      let(:to_day_date) {Date.parse '2022-09-10T00:16:27Z' }
+
+      before do
+        repos_response = instance_double(
+          Github::ReposConsumer,
+          call: [
+            {
+              name: 'repo1',
+              description: '',
+              url: 'URL:://repo1_updated',
+              git_date: '2022-09-10T00:16:27Z',
+              is_active: true
+            }
+          ]
+        )
+        allow(Github::ReposConsumer).to receive(:new).and_return(repos_response)
+
+        languages_response = instance_double(
+          Sync::FetchLanguages,
+          call: []
+        )
+        allow(Sync::FetchLanguages).to receive(:new).and_return(languages_response)
+
+        existing_repo1
+      end
+
+      it 'returns updated repos' do
+        repo_date = Date.parse fetch_repos.call.first[:git_date]
+        expect(repo_date).to eq(to_day_date)
+      end
+
+      it 'updates repos on DB' do
+        fetch_repos.call
+        expect(Profile.find_by(nickname: profile.nickname).repos.first.git_date).to eq(to_day_date)
+      end
+    end
   end
 end
