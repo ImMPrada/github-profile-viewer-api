@@ -10,6 +10,7 @@ module Sync
       assign_attributes true
       assign_repo_profile
 
+      repo.save
       repo
     end
 
@@ -17,6 +18,7 @@ module Sync
       self.repo = current_repo
       assign_attributes true
 
+      repo.save
       repo
     end
 
@@ -37,7 +39,6 @@ module Sync
         git_date: Date.parse(repo_data[:git_date])
       )
       repo.attributes = repo_params
-      repo.save
     end
 
     def assign_repo_profile

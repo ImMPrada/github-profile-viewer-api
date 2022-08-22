@@ -1,5 +1,5 @@
 module Sync
-  class FetchProfile 
+  class FetchProfile
     def initialize(profile_name)
       self.profile_name = profile_name
     end
@@ -8,11 +8,12 @@ module Sync
       self.profile = Profile.find_by(nickname: profile_name)
       self.github_profile = Github::ProfileConsumer.new(profile_name).call
 
-      return if profile.present? && github_profile.nil?
+      return if profile.blank? && github_profile.blank?
 
       create_profile_if_not_exists
       synchronize_profile
-      Sync::FetchRepos.new(profile).call
+
+      profile
     end
 
     private
@@ -30,6 +31,7 @@ module Sync
       github_profile_date = Date.parse(github_profile[:git_date])
 
       Sync::SyncProfile.new(github_profile).update_profile(profile) if profile_date < github_profile_date
+      Sync::FetchRepos.new(profile).call
     end
   end
 end
