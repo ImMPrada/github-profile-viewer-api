@@ -32,6 +32,7 @@ RSpec.describe Sync::FetchProfile do
           call: nil
         )
         allow(Github::ProfileConsumer).to receive(:new).and_return(profile_response)
+
         profile = Profile.find_by(nickname: profile_name)
         profile.destroy if profile.present?
       end

@@ -30,9 +30,7 @@ RSpec.describe Sync::FetchLanguages do
       is_active: true
     }
   end
-  let(:repo) do
-    build(:repo, repo_data)
-  end
+  let(:repo) { build(:repo, repo_data) }
   let(:fetch_languages) { described_class.new(profile, repo) }
   let(:languages_data) do
     [
@@ -82,13 +80,13 @@ RSpec.describe Sync::FetchLanguages do
         allow(Github::RepoLanguagesConsumer).to receive(:new).and_return(languages_response)
       end
 
-      it 'returns an array of languages with transmited data' do
+      it 'returns an array of languages' do
         expect(fetch_languages.call).to eq(languages_data)
       end
 
       it 'saves languages data on DB' do
         obtained_list_of_languages = fetch_languages.call.pluck(:name).sort
-        registered_list_of_languages = Profile.first.repos.first.languages.pluck(:name).sort
+        registered_list_of_languages = Profile.find_by(nickname: profile_name).repos.first.languages.pluck(:name).sort
 
         expect(obtained_list_of_languages).to eq(registered_list_of_languages)
       end
