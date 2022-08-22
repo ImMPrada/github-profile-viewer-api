@@ -8,7 +8,7 @@ module Sync
       self.profile = Profile.find_by(nickname: profile_name)
       self.github_profile = Github::ProfileConsumer.new(profile_name).call
 
-      return if profile.nil? && github_profile.nil?
+      return if profile.blank? && github_profile.blank?
 
       create_profile_if_not_exists
       synchronize_profile
