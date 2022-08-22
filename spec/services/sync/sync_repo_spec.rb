@@ -38,17 +38,19 @@ RSpec.describe Sync::SyncRepo do
   let(:initialized_sync) { described_class.new(profile, repo_data) }
 
   describe '#create_repo' do
+    let(:response) { initialized_sync.create_repo }
+
     it 'returns a Repo' do
-      expect(initialized_sync.create_repo).to be_a(Repo)
+      expect(response).to be_a(Repo)
     end
 
     it 'creates repo on DB' do
-      initialized_sync.create_repo
+      response
       expect(Repo.find_by(name: repo_name)).not_to be_nil
     end
 
     it 'associates the repo to the profile' do
-      initialized_sync.create_repo
+      response
       profile_repos = profile.repos
       expect(profile_repos.find_by(name: repo_name)).not_to be_nil
     end
@@ -56,15 +58,16 @@ RSpec.describe Sync::SyncRepo do
 
   describe '#update_repo' do
     let(:existing_repo) { create(:repo, name: repo_name, git_date: '2019-08-03T00:16:27Z', url: 'a', profile: profile) }
+    let(:response) { initialized_sync.update_repo(existing_repo) }
 
     before { existing_repo }
 
     it 'returns a Repo' do
-      expect(initialized_sync.update_repo(existing_repo)).to be_a(Repo)
+      expect(response).to be_a(Repo)
     end
 
     it 'updates the repo' do
-      initialized_sync.update_repo(existing_repo)
+      response
       repo = Repo.find_by(name: repo_name)
       updated_date = Date.parse repo_data[:git_date]
       check_points = repo.url == repo_url && repo.git_date == updated_date

@@ -51,6 +51,7 @@ RSpec.describe Sync::FetchLanguages do
       }
     ]
   end
+  let(:response) { fetch_languages.call }
 
   describe '#call' do
     describe 'languages for a repo, from Github: []' do
@@ -65,7 +66,7 @@ RSpec.describe Sync::FetchLanguages do
       end
 
       it 'returns []' do
-        expect(fetch_languages.call).to eq([])
+        expect(response).to eq([])
       end
     end
 
@@ -81,11 +82,11 @@ RSpec.describe Sync::FetchLanguages do
       end
 
       it 'returns an array of languages' do
-        expect(fetch_languages.call).to eq(languages_data)
+        expect(response).to eq(languages_data)
       end
 
       it 'saves languages data on DB' do
-        obtained_list_of_languages = fetch_languages.call.pluck(:name).sort
+        obtained_list_of_languages = response.pluck(:name).sort
         registered_list_of_languages = Profile.find_by(nickname: profile_name).repos.first.languages.pluck(:name).sort
 
         expect(obtained_list_of_languages).to eq(registered_list_of_languages)

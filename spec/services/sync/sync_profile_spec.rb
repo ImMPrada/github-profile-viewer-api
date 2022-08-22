@@ -25,29 +25,32 @@ RSpec.describe Sync::SyncProfile do
   let(:initialized_sync) { described_class.new(profile_data) }
 
   describe '#create_profile' do
+    let(:response) { initialized_sync.create_profile }
+
     it 'returns a Profile' do
-      expect(initialized_sync.create_profile).to be_a(Profile)
+      expect(response).to be_a(Profile)
     end
 
     it 'creates profile on DB' do
-      initialized_sync.create_profile
+      response
       expect(Profile.find_by(nickname: profile_name)).not_to be_nil
     end
   end
 
   describe '#update_profile' do
     let(:existing_profile) { create(:profile, nickname: profile_name, git_date: '2019-08-03T00:16:27Z', url: 'a') }
+    let(:response) { initialized_sync.update_profile(existing_profile) }
 
     before do
       existing_profile
     end
 
     it 'returns a Profile' do
-      expect(initialized_sync.update_profile(existing_profile)).to be_a(Profile)
+      expect(response).to be_a(Profile)
     end
 
     it 'updates the profile' do
-      initialized_sync.update_profile(existing_profile)
+      response
       profile = Profile.find_by(nickname: profile_name)
       updated_date = Date.parse profile_data[:git_date]
       check_points = profile.url == profile_url && profile.git_date == updated_date

@@ -23,6 +23,7 @@ RSpec.describe Sync::FetchRepos do
   end
   let(:profile) { create(:profile, profile_data) }
   let(:fetch_repos) { described_class.new(profile) }
+  let(:response) { fetch_repos.call }
 
   describe '#call' do
     describe 'repos from Github: []' do
@@ -35,7 +36,7 @@ RSpec.describe Sync::FetchRepos do
       end
 
       it 'returns []' do
-        expect(fetch_repos.call).to eq([])
+        expect(response).to eq([])
       end
     end
 
@@ -77,11 +78,11 @@ RSpec.describe Sync::FetchRepos do
       end
 
       it 'returns list of repos' do
-        expect(fetch_repos.call.size).to eq(3)
+        expect(response.size).to eq(3)
       end
 
       it 'saves repos on DB' do
-        fetch_repos.call
+        response
         expect(Profile.find_by(nickname: profile.nickname).repos.size).to eq(3)
       end
     end
@@ -115,12 +116,12 @@ RSpec.describe Sync::FetchRepos do
       end
 
       it 'returns updated repos' do
-        repo_date = Date.parse fetch_repos.call.first[:git_date]
+        repo_date = Date.parse response.first[:git_date]
         expect(repo_date).to eq(to_day_date)
       end
 
       it 'updates repos on DB' do
-        fetch_repos.call
+        response
         expect(Profile.find_by(nickname: profile.nickname).repos.first.git_date).to eq(to_day_date)
       end
     end

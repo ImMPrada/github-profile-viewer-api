@@ -23,6 +23,7 @@ RSpec.describe Sync::FetchProfile do
       twitter: 'im_mprada'
     }
   end
+  let(:response) { fetch_profile.call }
 
   describe '#call' do
     describe 'profile from Github: doesn\'t exist, profile from DB: doesn\'t exist' do
@@ -38,7 +39,7 @@ RSpec.describe Sync::FetchProfile do
       end
 
       it 'returns nil' do
-        expect(fetch_profile.call).to be_nil
+        expect(response).to be_nil
       end
     end
 
@@ -57,12 +58,12 @@ RSpec.describe Sync::FetchProfile do
       end
 
       it 'saves profile data in DB' do
-        fetch_profile.call
+        response
         expect(Profile.find_by(nickname: profile_name)).not_to be_nil
       end
 
       it 'returns the right profile from DB' do
-        expect(fetch_profile.call.url).to eq(profile_url)
+        expect(response.url).to eq(profile_url)
       end
     end
 
@@ -84,7 +85,7 @@ RSpec.describe Sync::FetchProfile do
       end
 
       it 'updates the profile in the DB' do
-        fetch_profile.call
+        response
         from_db = Profile.find_by(nickname: profile_name)
         obtained = from_db.values_at(:followers_count, :followings_count, :public_gists_count, :public_repos_count)
         expected = profile_data.values_at(:followers_count, :followings_count, :public_gists_count, :public_repos_count)
@@ -93,12 +94,12 @@ RSpec.describe Sync::FetchProfile do
       end
 
       it 'returns the profile updated' do
-        obtained_profile = fetch_profile.call
+        obtained_profile = response
         expect(obtained_profile).to eq(Profile.find_by(nickname: profile_name))
       end
 
       it 'returns the right profile from DB' do
-        fetch_profile.call
+        response
         expect(Profile.find_by(nickname: profile_name)[:url]).to eq(profile_url)
       end
     end

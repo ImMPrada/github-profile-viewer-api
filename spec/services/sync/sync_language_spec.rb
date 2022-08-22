@@ -46,21 +46,22 @@ RSpec.describe Sync::SyncLanguage do
   let(:profile) { create(:profile, profile_data) }
   let(:repo) { create(:repo, repo_data) }
   let(:initialized_sync) { described_class.new(profile, repo, languages_data) }
+  let(:response) { initialized_sync.synchronize }
 
   describe '#synchronize' do
     it 'returns a Language' do
-      expect(initialized_sync.synchronize).to be_a(Language)
+      expect(response).to be_a(Language)
     end
 
     it 'associates the language to the repo' do
-      initialized_sync.synchronize
+      response
       repo_languages = Repo.find_by(name: repo_name).languages
 
       expect(repo_languages.find_by(name: language_name)).not_to be_nil
     end
 
     it 'associates the language to the profile' do
-      initialized_sync.synchronize
+      response
       profile_languages = Profile.find_by(nickname: profile_name).languages
 
       expect(profile_languages.find_by(name: language_name)).not_to be_nil
