@@ -1,5 +1,7 @@
 module Github
   class ProfileConsumer
+    attr_reader :body, :code
+
     FIELDS_MAPPING = {
       nickname: 'login',
       avatar: 'avatar_url',
@@ -26,6 +28,7 @@ module Github
       github_response = ApiClient.new(username)
       github_response.fetch_profile_data
       self.github_profile = github_response.body
+      self.code = github_response.code
 
       return unless github_response.code == 200
 
@@ -34,6 +37,7 @@ module Github
 
     private
 
+    attr_writer :body, :code
     attr_accessor :github_profile, :username
 
     def build_response
@@ -41,7 +45,8 @@ module Github
       FIELDS_MAPPING.each do |profile_field, gh_field|
         assambled_profile[profile_field] = github_profile[gh_field]
       end
-      assambled_profile
+
+      self.body = assambled_profile
     end
   end
 end
