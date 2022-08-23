@@ -17,7 +17,7 @@ RSpec.describe Sync::FetchProfile do
       followers_count: 10,
       followings_count: 6,
       git_date: '2022-08-03T00:16:27Z',
-      location: 'Colombia',
+      location: nil,
       public_gists_count: 20,
       public_repos_count: 60,
       twitter: 'im_mprada'
