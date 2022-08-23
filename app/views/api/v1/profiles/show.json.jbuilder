@@ -1,4 +1,4 @@
-json.message = @message
+json.message @message
 
 json.profile do
   json.partial! 'profile', profile: @profile

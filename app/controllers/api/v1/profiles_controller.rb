@@ -4,7 +4,7 @@ module Api
       MESSAGES = {
         '200': nil,
         '404': 'User not found',
-        '403': 'Maybe outof date profile'
+        '403': 'May be out of date'
       }.freeze
 
       def show
