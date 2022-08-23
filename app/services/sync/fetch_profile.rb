@@ -1,6 +1,5 @@
 module Sync
   class FetchProfile
-
     attr_reader :body, :code
 
     def initialize(profile_name)
