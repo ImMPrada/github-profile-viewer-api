@@ -10,6 +10,7 @@ module Sync
       self.profile = Profile.find_by(nickname: profile_name)
       call_for_github_data
       return if profile.blank? && github_profile.blank?
+      return if delete_profile
 
       create_profile_if_not_exists
       synchronize_profile
@@ -27,6 +28,13 @@ module Sync
       profile_consumer.call
       self.github_profile = profile_consumer.body
       self.code = profile_consumer.code
+    end
+
+    def delete_profile
+      return if profile.blank? || code != 404
+
+      Sync::SyncProfile.new(github_profile).delete_profile(profile)
+      true
     end
 
     def create_profile_if_not_exists
