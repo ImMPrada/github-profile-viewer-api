@@ -41,12 +41,12 @@ module Github
     attr_accessor :github_profile, :username
 
     def build_response
-      assambled_profile = {}
+      assembled_profile = {}
       FIELDS_MAPPING.each do |profile_field, gh_field|
-        assambled_profile[profile_field] = github_profile[gh_field]
+        assembled_profile[profile_field] = github_profile[gh_field]
       end
 
-      self.body = assambled_profile
+      self.body = assembled_profile
     end
   end
 end
