@@ -52,17 +52,23 @@ RSpec.describe Github::ProfileConsumer do
     end
 
     it 'returns right body class' do
-      expect(profile_consumer.call.class).to eq(Hash)
+      profile_consumer.call
+      expect(profile_consumer.body.class).to eq(Hash)
+    end
+
+    it 'returns right code' do
+      profile_consumer.call
+      expect(profile_consumer.code).to eq(200)
     end
 
     it 'returns right body content' do
-      expect(profile_consumer.call).to eq(expected_response)
+      profile_consumer.call
+      expect(profile_consumer.body).to eq(expected_response)
     end
   end
 
   describe 'when ApiClient code: 4XX' do
     let(:expected_response) { nil }
-    let(:result) { profile_consumer.call }
 
     before do
       profile_response = instance_double(
@@ -75,11 +81,18 @@ RSpec.describe Github::ProfileConsumer do
     end
 
     it 'returns right body class' do
-      expect(result.class).to eq(NilClass)
+      profile_consumer.call
+      expect(profile_consumer.body.class).to eq(NilClass)
+    end
+
+    it 'returns right code' do
+      profile_consumer.call
+      expect(profile_consumer.code).to eq(403)
     end
 
     it 'returns right body content' do
-      expect(result).to be_nil
+      profile_consumer.call
+      expect(profile_consumer.body).to be_nil
     end
   end
 end

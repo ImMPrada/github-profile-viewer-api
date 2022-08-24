@@ -1,24 +1,33 @@
 module Sync
   class FetchProfile
+    attr_reader :body, :code
+
     def initialize(profile_name)
       self.profile_name = profile_name
     end
 
     def call
       self.profile = Profile.find_by(nickname: profile_name)
-      self.github_profile = Github::ProfileConsumer.new(profile_name).call
-
+      call_for_github_data
       return if profile.blank? && github_profile.blank?
 
       create_profile_if_not_exists
       synchronize_profile
 
-      profile
+      self.body = profile
     end
 
     private
 
+    attr_writer :body, :code
     attr_accessor :profile_name, :github_profile, :profile
+
+    def call_for_github_data
+      profile_consumer = Github::ProfileConsumer.new(profile_name)
+      profile_consumer.call
+      self.github_profile = profile_consumer.body
+      self.code = profile_consumer.code
+    end
 
     def create_profile_if_not_exists
       return unless profile.nil?
