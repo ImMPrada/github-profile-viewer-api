@@ -133,5 +133,41 @@ RSpec.describe Sync::FetchProfile do
         expect(Profile.find_by(nickname: profile_name)[:url]).to eq(profile_url)
       end
     end
+
+    describe 'profile from Github: doesn\'t exist, profile from DB: exists' do
+      let(:location)  { create(:location) }
+      let(:profile) { create(:profile, nickname: profile_name, location: location) }
+
+      before do
+        profile_call_fetch_profile = instance_double(
+          Github::ProfileConsumer,
+          call: {},
+          code: 404,
+          body: nil
+        )
+        allow(Github::ProfileConsumer).to receive(:new).and_return(profile_call_fetch_profile)
+
+        profile
+      end
+
+      it 'destroys the profile' do
+        call_fetch_profile
+        expect(Profile.find_by(nickname: profile_name)).to be_nil
+      end
+
+      it 'returns nil' do
+        expect(call_fetch_profile).to be_nil
+      end
+
+      it 'returns nil body' do
+        expect(fetch_profile.body).to be_nil
+      end
+
+      it 'returns the right code' do
+        call_fetch_profile
+        obtained_code = fetch_profile.code
+        expect(obtained_code).to eq(404)
+      end
+    end
   end
 end
