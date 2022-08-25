@@ -18,6 +18,11 @@ module Sync
       profile
     end
 
+    def delete_profile(current_profile)
+      current_profile.destroy
+      self.profile = nil
+    end
+
     private
 
     attr_accessor :profile_data, :profile
