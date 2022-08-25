@@ -37,25 +37,39 @@ RSpec.describe Sync::SyncProfile do
     end
   end
 
-  describe '#update_profile' do
+  describe 'when a profile exists on DB' do
     let(:existing_profile) { create(:profile, nickname: profile_name, git_date: '2019-08-03T00:16:27Z', url: 'a') }
-    let(:response) { initialized_sync.update_profile(existing_profile) }
 
-    before do
-      existing_profile
+    describe '#update_profile' do
+      let(:response) { initialized_sync.update_profile(existing_profile) }
+
+      it 'returns a Profile' do
+        expect(response).to be_a(Profile)
+      end
+
+      it 'updates the profile' do
+        response
+        profile = Profile.find_by(nickname: profile_name)
+        updated_date = Date.parse profile_data[:git_date]
+        check_points = profile.url == profile_url && profile.git_date == updated_date
+
+        expect(check_points).to eq(true)
+      end
     end
 
-    it 'returns a Profile' do
-      expect(response).to be_a(Profile)
-    end
+    describe '#delete_profile' do
+      let(:response) { initialized_sync.delete_profile(existing_profile) }
 
-    it 'updates the profile' do
-      response
-      profile = Profile.find_by(nickname: profile_name)
-      updated_date = Date.parse profile_data[:git_date]
-      check_points = profile.url == profile_url && profile.git_date == updated_date
+      it 'returns nil' do
+        expect(response).to be_nil
+      end
 
-      expect(check_points).to eq(true)
+      it 'deletes the profile on DB' do
+        response
+        profile = Profile.find_by(nickname: profile_name)
+
+        expect(profile.nil?).to eq(true)
+      end
     end
   end
 end
