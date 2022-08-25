@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resource :health, only: [:show], controller: :health
-      resource :profile, only: [:show]
+      resources :profiles, only: [:show], defaults: { format: 'json' }
     end
   end
 end

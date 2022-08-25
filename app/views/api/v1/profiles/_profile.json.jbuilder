@@ -7,7 +7,6 @@ json.publicReposCount profile.public_repos_count
 json.publicGistsCount profile.public_gists_count
 json.followersCount profile.followers_count
 json.followingsCount profile.followings_count
-json.location nil
-json.location profile.location.name if profile.location.present?
+json.location profile.location&.name
 
 json.languages profile.languages.weights_by_language
