@@ -11,7 +11,7 @@ module Api
         user_id = params[:id]
         build_response(user_id)
 
-        render json: { message: @message, profile: nil } unless @profile
+        render json: { message: @message, profile: nil }, status: :ok unless @profile
       end
 
       private

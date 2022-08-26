@@ -44,7 +44,6 @@ jobs:
           MYSQL_PASSWORD: password
           RAILS_ENV: test
           MYSQL_HOST: 127.0.0.1
-          CORS_ORIGIN: '*'
 
       - name: Run RSpec
         run: bundle exec rspec  --require rails_helper
@@ -52,4 +51,3 @@ jobs:
           MYSQL_PASSWORD: password
           RAILS_ENV: test
           MYSQL_HOST: 127.0.0.1
-          CORS_ORIGIN: '*'
