@@ -30,7 +30,8 @@ module Sync
     def assign_attributes
       profile_params = profile_data.merge(
         location: Location.find_or_create_by(name: profile_data[:location]),
-        git_date: profile_data[:git_date]
+        git_date: profile_data[:git_date],
+        join_date: profile_data[:join_date]
       )
 
       profile.attributes = profile_params

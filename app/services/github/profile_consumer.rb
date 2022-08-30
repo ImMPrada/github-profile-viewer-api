@@ -17,7 +17,8 @@ module Github
       followers_count: 'followers',
       followings_count: 'following',
       git_date: 'updated_at',
-      location: 'location'
+      location: 'location',
+      join_date: 'created_at'
     }.freeze
 
     def initialize(username)
