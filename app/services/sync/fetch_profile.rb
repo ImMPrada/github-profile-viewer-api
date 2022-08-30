@@ -46,6 +46,8 @@ module Sync
     end
 
     def synchronize_profile
+      return if github_profile.blank?
+
       profile_date = profile.git_date
       github_profile_date = Date.parse(github_profile[:git_date])
 
