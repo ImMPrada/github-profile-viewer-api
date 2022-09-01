@@ -66,7 +66,7 @@ RSpec.describe Sync::FetchLanguages do
       end
 
       it 'returns []' do
-        expect(response).to eq([])
+        expect(response).to be_nil
       end
     end
 
