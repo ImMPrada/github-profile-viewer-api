@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_23_222844) do
+ActiveRecord::Schema.define(version: 2022_08_30_195747) do
 
   create_table "languages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2022_08_23_222844) do
     t.integer "followings_count", null: false
     t.date "git_date", null: false
     t.bigint "location_id"
+    t.date "join_date"
     t.index ["location_id"], name: "index_profiles_on_location_id"
     t.index ["nickname"], name: "index_profiles_on_nickname", unique: true
   end

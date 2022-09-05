@@ -3,6 +3,10 @@ json.name profile.name
 json.url profile.url
 json.avatar profile.avatar
 json.updatedAt profile.git_date
+json.initialDate profile.join_date
+json.blog profile.blog
+json.company profile.company
+json.twitter profile.twitter
 json.publicReposCount profile.public_repos_count
 json.publicGistsCount profile.public_gists_count
 json.followersCount profile.followers_count

@@ -7,6 +7,7 @@ class Profile < ApplicationRecord
   validates :followers_count, presence: true
   validates :followings_count, presence: true
   validates :git_date, presence: true
+  validates :join_date, presence: true
 
   belongs_to :location
 
